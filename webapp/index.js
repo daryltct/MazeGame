@@ -24,10 +24,6 @@ const render = Render.create({
 Render.run(render);
 Runner.run(Runner.create(), engine);
 
-//add test shape
-const shape = Bodies.rectangle(100, 100, 50, 50);
-World.add(world, shape);
-
 //********* CANVAS BORDERS *********
 const borders = [
 	Bodies.rectangle(300, 0, 600, 20, { isStatic: true }), //top
@@ -37,3 +33,25 @@ const borders = [
 ];
 
 World.add(world, borders);
+
+//********* MAZE CONFIGURATION *********
+//Grid: 2D array representing the cells on the map
+const grid = Array(3)
+	.fill(null) //create an array of size 3, filled with null elements
+	.map(() => {
+		return Array(3).fill(false); //.map iterates through each null element, replace with an array of size 3 filled with 'false'
+	});
+
+//Verticals: 2D array representing vertical walls on the map
+const verticals = Array(3)
+	.fill(null) //
+	.map(() => {
+		return Array(2).fill(false);
+	});
+
+//Horizontals: 2D array representing horizontal walls on the map
+const horizontals = Array(2)
+	.fill(null) //
+	.map(() => {
+		return Array(3).fill(false);
+	});
