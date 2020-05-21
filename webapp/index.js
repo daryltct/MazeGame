@@ -8,6 +8,9 @@ const border = 20;
 const rows = 3;
 const columns = 3;
 
+const unitLength = width / columns;
+const unitHeight = height / rows;
+
 //********* MATTER.JS CONFIGURATIONS *********
 
 //create an engine
@@ -38,7 +41,7 @@ const borders = [
 
 World.add(world, borders);
 
-//********* MAZE CONFIGURATION *********
+//********* MAZE CONFIGURATION AlGORITHM *********
 //Grid: 2D array representing the cells on the map
 const grid = Array(rows)
 	.fill(null) //create an array of size (rows), filled with null elements
@@ -113,4 +116,42 @@ const enterCell = (row, column) => {
 	}
 };
 
-enterCell(1, 1);
+//Generate random maze at random starting position
+const startRow = Math.floor(Math.random() * rows);
+const startColumn = Math.floor(Math.random() * columns);
+enterCell(startRow, startColumn);
+
+//********* RENDERING MAZE *********
+horizontals.forEach((row, rowIndex) => {
+	row.forEach((open, columnIndex) => {
+		if (open) return;
+
+		const wall = Bodies.rectangle(
+			columnIndex * unitLength + unitLength / 2, //x axis
+			rowIndex * unitHeight + unitHeight, //y axis
+			unitLength, //length of rectangle
+			5, //height of rectangle
+			{
+				isStatic: true
+			}
+		);
+		World.add(world, wall);
+	});
+});
+
+verticals.forEach((row, rowIndex) => {
+	row.forEach((open, columnIndex) => {
+		if (open) return;
+
+		const wall = Bodies.rectangle(
+			columnIndex * unitLength + unitLength,
+			rowIndex * unitHeight + unitHeight / 2,
+			5,
+			unitHeight,
+			{
+				isStatic: true
+			}
+		);
+		World.add(world, wall);
+	});
+});
