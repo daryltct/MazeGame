@@ -1,4 +1,4 @@
-const { World, Engine, Runner, Render, Bodies } = Matter;
+const { World, Engine, Runner, Render, Bodies, Body } = Matter;
 
 //********* MAZE DIMENSIONS *********
 const width = 600;
@@ -159,9 +159,35 @@ verticals.forEach((row, rowIndex) => {
 
 //********* RENDERING BALL *********
 const ballRadius = Math.min(unitLength, unitHeight) / 4;
-const ball = Bodies.circle(unitLength / 2, unitHeight / 2, ballRadius);
+const ball = Bodies.circle(unitLength / 2, unitHeight / 2, ballRadius, {
+	label: 'ball'
+});
 World.add(world, ball);
 
 //********* RENDERING GOAL *********
-const goal = Bodies.rectangle(width - unitLength / 2, height - unitHeight / 2, unitLength / 2, unitHeight / 2);
+const goal = Bodies.rectangle(width - unitLength / 2, height - unitHeight / 2, unitLength / 2, unitHeight / 2, {
+	isStatic: true
+});
 World.add(world, goal);
+
+//********* KEYPRESS EVENT TO CONTROL BALL *********
+document.addEventListener('keydown', (event) => {
+	const { x, y } = ball.velocity; //current velocity of ball
+
+	//key 'w' (move up)
+	if (event.keyCode === 87) {
+		Body.setVelocity(ball, { x, y: y - 5 });
+	}
+	//key 'd' (move right)
+	if (event.keyCode === 68) {
+		Body.setVelocity(ball, { x: x + 5, y });
+	}
+	//key 's' (move down)
+	if (event.keyCode === 83) {
+		Body.setVelocity(ball, { x, y: y + 5 });
+	}
+	//key 'a' (move left)
+	if (event.keyCode === 65) {
+		Body.setVelocity(ball, { x: x - 5, y });
+	}
+});
