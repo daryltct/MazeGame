@@ -5,8 +5,12 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 const border = 2;
 
-const rows = 6;
-const columns = 10;
+const storedRows = Number(localStorage.getItem('gameRows'));
+const storedColumns = Number(localStorage.getItem('gameColumns'));
+console.log(storedRows, storedColumns);
+const rows = storedRows < 4 ? 4 : storedRows + 2;
+const columns = storedColumns < 7 ? 7 : storedColumns + 2;
+console.log(rows, columns);
 
 const unitLength = width / columns;
 const unitHeight = height / rows;
@@ -203,6 +207,16 @@ document.addEventListener('keydown', (event) => {
 });
 
 //********* WIN CONDITION *********
+document.querySelector('#next').addEventListener('click', () => {
+	localStorage.setItem('gameRows', rows);
+	localStorage.setItem('gameColumns', columns);
+	location.reload();
+});
+document.querySelector('#restart').addEventListener('click', () => {
+	localStorage.clear();
+	location.reload();
+});
+
 Events.on(engine, 'collisionStart', (event) => {
 	event.pairs.forEach((collision) => {
 		const labels = [ 'ball', 'goal' ];
