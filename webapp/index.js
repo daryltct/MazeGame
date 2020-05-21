@@ -59,3 +59,32 @@ const horizontals = Array(rows - 1)
 	.map(() => {
 		return Array(columns).fill(false);
 	});
+
+const enterCell = (row, column) => {
+	//check if cell has been visited
+	if (grid[row][column]) return;
+	//mark cell as visited
+	grid[row][column] = true;
+	//generate randomly ordered list of neighbours
+	const neighbours = [
+		[ row - 1, column ], //above
+		[ row + 1, column ], //below
+		[ row, column - 1 ], //left
+		[ row, column + 1 ] //right
+	];
+
+	//for each neighbour
+	for (let neighbour of neighbours) {
+		const [ nextRow, nextColumn ] = neighbour;
+		//check if cell is out of bounds
+		if (nextRow < 0 || nextRow >= rows || nextColumn < 0 || nextColumn >= columns) {
+			continue;
+		}
+
+		//check if cell is already visited
+		if (grid[nextRow][nextColumn]) continue;
+
+		//remove wall based on direction of neighbour
+		//enter cell
+	}
+};
