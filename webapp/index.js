@@ -16,6 +16,7 @@ const unitHeight = height / rows;
 //create an engine
 const engine = Engine.create();
 const { world } = engine; //a World object is created when an engine is created
+engine.world.gravity.y = 0;
 
 //create a renderer
 const render = Render.create({
@@ -155,3 +156,12 @@ verticals.forEach((row, rowIndex) => {
 		World.add(world, wall);
 	});
 });
+
+//********* RENDERING BALL *********
+const ballRadius = Math.min(unitLength, unitHeight) / 4;
+const ball = Bodies.circle(unitLength / 2, unitHeight / 2, ballRadius);
+World.add(world, ball);
+
+//********* RENDERING GOAL *********
+const goal = Bodies.rectangle(width - unitLength / 2, height - unitHeight / 2, unitLength / 2, unitHeight / 2);
+World.add(world, goal);
