@@ -1,11 +1,11 @@
-const { World, Engine, Runner, Render, Bodies, Body } = Matter;
+const { World, Engine, Runner, Render, Bodies, Body, Events } = Matter;
 
 //********* MAZE DIMENSIONS *********
 const width = 600;
 const height = 600;
 const border = 20;
 
-const rows = 3;
+const rows = 6;
 const columns = 3;
 
 const unitLength = width / columns;
@@ -133,7 +133,8 @@ horizontals.forEach((row, rowIndex) => {
 			unitLength, //length of rectangle
 			5, //height of rectangle
 			{
-				isStatic: true
+				isStatic: true,
+				label: 'wall'
 			}
 		);
 		World.add(world, wall);
@@ -150,7 +151,8 @@ verticals.forEach((row, rowIndex) => {
 			5,
 			unitHeight,
 			{
-				isStatic: true
+				isStatic: true,
+				label: 'wall'
 			}
 		);
 		World.add(world, wall);
@@ -166,7 +168,8 @@ World.add(world, ball);
 
 //********* RENDERING GOAL *********
 const goal = Bodies.rectangle(width - unitLength / 2, height - unitHeight / 2, unitLength / 2, unitHeight / 2, {
-	isStatic: true
+	isStatic: true,
+	label: 'goal'
 });
 World.add(world, goal);
 
@@ -190,4 +193,21 @@ document.addEventListener('keydown', (event) => {
 	if (event.keyCode === 65) {
 		Body.setVelocity(ball, { x: x - 5, y });
 	}
+});
+
+//********* WIN CONDITION *********
+Events.on(engine, 'collisionStart', (event) => {
+	event.pairs.forEach((collision) => {
+		const labels = [ 'ball', 'goal' ];
+
+		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
+			world.gravity.y = 1;
+			world.bodies.forEach((body) => {
+				if (body.label === 'wall' || body.label === 'goal') {
+					Body.setStatic(body, false);
+				}
+			});
+			document.querySelector('.winner').classList.remove('hidden');
+		}
+	});
 });
