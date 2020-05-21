@@ -1,12 +1,12 @@
 const { World, Engine, Runner, Render, Bodies, Body, Events } = Matter;
 
 //********* MAZE DIMENSIONS *********
-const width = 600;
-const height = 600;
-const border = 20;
+const width = window.innerWidth;
+const height = window.innerHeight;
+const border = 2;
 
 const rows = 6;
-const columns = 3;
+const columns = 10;
 
 const unitLength = width / columns;
 const unitHeight = height / rows;
@@ -23,6 +23,7 @@ const render = Render.create({
 	element: document.body, //where to display inside of HTML document
 	engine: engine, //specify engine to use
 	options: {
+		wireframes: false,
 		width,
 		height
 	}
@@ -162,14 +163,20 @@ verticals.forEach((row, rowIndex) => {
 //********* RENDERING BALL *********
 const ballRadius = Math.min(unitLength, unitHeight) / 4;
 const ball = Bodies.circle(unitLength / 2, unitHeight / 2, ballRadius, {
-	label: 'ball'
+	label: 'ball',
+	render: {
+		fillStyle: 'rgb(222, 241, 50)'
+	}
 });
 World.add(world, ball);
 
 //********* RENDERING GOAL *********
 const goal = Bodies.rectangle(width - unitLength / 2, height - unitHeight / 2, unitLength / 2, unitHeight / 2, {
 	isStatic: true,
-	label: 'goal'
+	label: 'goal',
+	render: {
+		fillStyle: 'rgb(25, 230, 25)'
+	}
 });
 World.add(world, goal);
 
