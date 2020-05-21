@@ -60,22 +60,35 @@ const horizontals = Array(rows - 1)
 		return Array(columns).fill(false);
 	});
 
+const randomize = (arr) => {
+	let count = arr.length;
+	while (count > 0) {
+		const index = Math.floor(Math.random() * count);
+		count--;
+
+		const temp = arr[count];
+		arr[count] = arr[index];
+		arr[index] = temp;
+	}
+	return arr;
+};
+
 const enterCell = (row, column) => {
 	//check if cell has been visited
 	if (grid[row][column]) return;
 	//mark cell as visited
 	grid[row][column] = true;
 	//generate randomly ordered list of neighbours
-	const neighbours = [
-		[ row - 1, column ], //above
-		[ row + 1, column ], //below
-		[ row, column - 1 ], //left
-		[ row, column + 1 ] //right
-	];
+	const neighbours = randomize([
+		[ row - 1, column, 'up' ], //above
+		[ row + 1, column, 'down' ], //below
+		[ row, column - 1, 'left' ], //left
+		[ row, column + 1, 'right' ] //right
+	]);
 
 	//for each neighbour
 	for (let neighbour of neighbours) {
-		const [ nextRow, nextColumn ] = neighbour;
+		const [ nextRow, nextColumn, direction ] = neighbour;
 		//check if cell is out of bounds
 		if (nextRow < 0 || nextRow >= rows || nextColumn < 0 || nextColumn >= columns) {
 			continue;
@@ -85,6 +98,19 @@ const enterCell = (row, column) => {
 		if (grid[nextRow][nextColumn]) continue;
 
 		//remove wall based on direction of neighbour
-		//enter cell
+		if (direction === 'up') {
+			horizontals[row - 1][column] = true;
+		} else if (direction === 'down') {
+			horizontals[row][column] = true;
+		} else if (direction === 'left') {
+			verticals[row][column - 1] = true;
+		} else {
+			verticals[row][column] = true;
+		}
+
+		//enter cell recursively
+		enterCell(nextRow, nextColumn);
 	}
 };
+
+enterCell(1, 1);
