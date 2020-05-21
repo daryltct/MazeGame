@@ -3,6 +3,10 @@ const { World, Engine, Runner, Render, Bodies } = Matter;
 //********* MAZE DIMENSIONS *********
 const width = 600;
 const height = 600;
+const border = 20;
+
+const rows = 3;
+const columns = 3;
 
 //********* MATTER.JS CONFIGURATIONS *********
 
@@ -26,32 +30,32 @@ Runner.run(Runner.create(), engine);
 
 //********* CANVAS BORDERS *********
 const borders = [
-	Bodies.rectangle(300, 0, 600, 20, { isStatic: true }), //top
-	Bodies.rectangle(300, 600, 600, 20, { isStatic: true }), //bottom
-	Bodies.rectangle(0, 300, 20, 600, { isStatic: true }), //left
-	Bodies.rectangle(600, 300, 20, 600, { isStatic: true }) //right
+	Bodies.rectangle(width / 2, 0, width, border, { isStatic: true }), //top
+	Bodies.rectangle(width / 2, height, width, border, { isStatic: true }), //bottom
+	Bodies.rectangle(0, height / 2, border, height, { isStatic: true }), //left
+	Bodies.rectangle(width, height / 2, border, height, { isStatic: true }) //right
 ];
 
 World.add(world, borders);
 
 //********* MAZE CONFIGURATION *********
 //Grid: 2D array representing the cells on the map
-const grid = Array(3)
-	.fill(null) //create an array of size 3, filled with null elements
+const grid = Array(rows)
+	.fill(null) //create an array of size (rows), filled with null elements
 	.map(() => {
-		return Array(3).fill(false); //.map iterates through each null element, replace with an array of size 3 filled with 'false'
+		return Array(columns).fill(false); //.map iterates through each null element, replace with an array of size (columns) filled with 'false'
 	});
 
 //Verticals: 2D array representing vertical walls on the map
-const verticals = Array(3)
+const verticals = Array(rows)
 	.fill(null) //
 	.map(() => {
-		return Array(2).fill(false);
+		return Array(columns - 1).fill(false);
 	});
 
 //Horizontals: 2D array representing horizontal walls on the map
-const horizontals = Array(2)
+const horizontals = Array(rows - 1)
 	.fill(null) //
 	.map(() => {
-		return Array(3).fill(false);
+		return Array(columns).fill(false);
 	});
